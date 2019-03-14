@@ -21,7 +21,7 @@ public class VolleyController {
     private Context mContext;
 
     //Backend URL
-    public static final String DEFAULT_BASE_URL = "http://ecse321-11.ece.mcgill.ca:8080/";
+    public static final String DEFAULT_BASE_URL = "https://treeple-api.herokuapp.com/";
 
     private VolleyController(Context context) {
         mContext = context.getApplicationContext();
