@@ -11,5 +11,12 @@
 # Virtual machine crash logs
 hs_err_pid*
 
-# Node Modules
+# Node modules
 *node_modules/
+
+# Java settings files
+*.project
+*.settings/
+
+# VSCode settings
+*.vscode/
