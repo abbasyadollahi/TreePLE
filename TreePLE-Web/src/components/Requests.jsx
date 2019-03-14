@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-const webURL = 'https://' + webHost + ':' + webPort + '/';
-const apiURL = 'https://' + apiHost + ':' + apiPort + '/';
-
+const webURL = `https://${webHost}${process.env.NODE_ENV === 'development' ? ':' + webPort : ''}/`;
+const apiURL = `https://${apiHost}${process.env.NODE_ENV === 'development' ? ':' + apiPort : ''}/`;
 
 const AXIOS = axios.create({
   baseURL: apiURL,
