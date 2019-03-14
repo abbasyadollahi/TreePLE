@@ -278,7 +278,7 @@ public class Tree
   }
 
   public boolean addReportAt(SurveyReport aReport, int index)
-  {  
+  {
     boolean wasAdded = false;
     if(addReport(aReport))
     {
@@ -301,8 +301,8 @@ public class Tree
       reports.remove(aReport);
       reports.add(index, aReport);
       wasAdded = true;
-    } 
-    else 
+    }
+    else
     {
       wasAdded = addReportAt(aReport, index);
     }

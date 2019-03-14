@@ -31,7 +31,7 @@ public class TreePLESpringApplication extends SpringBootServletInitializer {
     private AndroidProperties androidProperties;
 
     @Autowired
-    private WebFrontendProperties webFrontendProperties;
+    private FrontendProperties frontendProperties;
 
     private SQLiteJDBC sql;
 
@@ -56,7 +56,7 @@ public class TreePLESpringApplication extends SpringBootServletInitializer {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 // Allow web client
-                String frontendUrl = "http://" + webFrontendProperties.getIp() + ":" + webFrontendProperties.getPort();
+                String frontendUrl = "http://" + frontendProperties.getIp() + ":" + frontendProperties.getPort();
                 // Allow android client
                 String androidUrl = "http://" + androidProperties.getIp() + ":" + androidProperties.getPort();
                 // For debug purposes, allow connecting from localhost as well
@@ -66,19 +66,17 @@ public class TreePLESpringApplication extends SpringBootServletInitializer {
                         .allowedOrigins(
                             frontendUrl,
                             androidUrl,
-                            "http://ecse321-11.ece.mcgill.ca:8087",
-                            "https://ecse321-11.ece.mcgill.ca:8087",
-                            "http://localhost:8087",
-                            "https://localhost:8087",
-                            "http://127.0.0.1:8087",
-                            "https://127.0.0.1:8087");
+                            "http://localhost:5000",
+                            "https://localhost:5000",
+                            "http://127.0.0.1:5000",
+                            "https://127.0.0.1:5000");
             }
         };
     }
 
     @Bean
     @EventListener(ApplicationEnvironmentPreparedEvent.class)
-    public SQLiteJDBC ModelIdCountInitializer() {
+    public SQLiteJDBC modelIdCountInitializer() {
         sql = new SQLiteJDBC();
         sql.connect();
         Tree.setNextTreeId(sql.getMaxTreeId() + 1);
@@ -94,7 +92,7 @@ public class TreePLESpringApplication extends SpringBootServletInitializer {
     }
 
     @PreDestroy
-    public void CloseSQLite() {
+    public void closeSQLite() {
         if (sql != null)
             sql.closeConnection();
     }

@@ -23,7 +23,7 @@ public class TreePLERestController {
 
     @RequestMapping("/")
     public String index() {
-        return "TreePLE application root. Web-based frontend is a TODO. Use the REST API to manage TreePLE objects.\n";
+        return "TreePLE application root. Web-based frontend is a TODO. Use the REST API to manage TreePLE objects.";
     }
 
 

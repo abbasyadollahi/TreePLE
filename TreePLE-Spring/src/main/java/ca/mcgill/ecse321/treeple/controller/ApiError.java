@@ -56,5 +56,4 @@ class ApiError {
 	public void setDebugMessage(String debugMessage) {
 		this.debugMessage = debugMessage;
 	}
-
 }
