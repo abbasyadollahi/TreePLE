@@ -27,7 +27,7 @@ matrix:
     -
       language: java
       jdk:
-        - oraclejdk8
+        - oraclejdk10
       before_install:
         - "cd TreePLE-Spring"
       deploy:
