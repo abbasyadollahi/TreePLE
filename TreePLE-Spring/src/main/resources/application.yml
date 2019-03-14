@@ -10,10 +10,6 @@ spring:
   profiles: dev, test
 server:
   port: 8000
-client:
-  web:
-    ip: localhost
-    port: 5000
 
 ---
 
@@ -21,7 +17,3 @@ spring:
   profiles: prod
 server:
   port: ${PORT:8000}
-client:
-  web:
-    ip: localhost
-    port: 5000

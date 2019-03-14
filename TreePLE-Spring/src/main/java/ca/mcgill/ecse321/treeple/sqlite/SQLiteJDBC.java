@@ -13,7 +13,7 @@ import ca.mcgill.ecse321.treeple.model.User.*;
 public class SQLiteJDBC {
 
     private static Connection c;
-    private static String dbPath = System.getProperty("user.dir") + "/TreePLE-Spring/src/main/resources/treeple.db";
+    private static String dbPath = System.getProperty("user.dir") + "/src/main/resources/treeple.db";
 
     public SQLiteJDBC() {
         // if (TreePLESpringApplication.env.acceptsProfiles("prod")) {
