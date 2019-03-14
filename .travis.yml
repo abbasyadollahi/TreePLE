@@ -17,23 +17,24 @@ matrix:
         - npm run lint
         - npm run test
         - npm run build
-      deploy:
-        provider: heroku
-        app: treeple-web
-        api_key:
-          secure: q52c8gOVk6hT9xqzUTxERbDWPvjWJerHxa9wbhd/McB1OwE1OXzXefvG67aIRVrwvOOUT4SbgUlwT/2jfJxSQjDrMo6zliPYAoCp0KRW4JSKPbVF9qSAazVvVE6ncSy6D+ouZ3v9fZJrb8izYh8To5zYsx2lSM0iUAVyGNoFZq3JYxoDB8mwUjd+55JQfwMQI0QkSOAST70Ud78jPGJ863NFxtIaJFO0RtU0LsQJSPh2/n0ALasju10348KXoLh+GUW529Tv2kFWFsQ1r6cf8VJeQNy8oZquL+Hx9TGgFm6yFeX9heFyhNElcvN/LHwYeKmP1Xpm2t+YtEvDI0Hc8if1UnsmFMY8eIxYJ/9SHOvx2CwhNMHuwWKkCITcdyWo0J2A2Qzb7nUUjckwUQUDn813g7viGCADI8ifirQReadCKGvbP6X0UZAf3viaJetEjq1IZyJaMd9GEVFp6zP6yOtLdMft+Qa35fq9p867gjZugav7jux6eVMzELpNgEZ2nPTnzA/PMWbafqXVIFAmvPCcol693TIIaKTmoF/Fos796n1YfujmMUXKiItJoFFXO+QpaUDfEokNc6TVTKZqRcyJJ1eziGPt6gqKMkB9dvgMa53erFhWy2OfLDuQnti2bJXShJNJIzjrei5Ldk5TyJ+7dulA9l7c1/r+JAwcitU=
-        on:
-          repo: theGirrafish/TreePLE
+      # deploy:
+      #   provider: heroku
+      #   app: treeple-web
+      #   api_key:
+      #     secure: q52c8gOVk6hT9xqzUTxERbDWPvjWJerHxa9wbhd/McB1OwE1OXzXefvG67aIRVrwvOOUT4SbgUlwT/2jfJxSQjDrMo6zliPYAoCp0KRW4JSKPbVF9qSAazVvVE6ncSy6D+ouZ3v9fZJrb8izYh8To5zYsx2lSM0iUAVyGNoFZq3JYxoDB8mwUjd+55JQfwMQI0QkSOAST70Ud78jPGJ863NFxtIaJFO0RtU0LsQJSPh2/n0ALasju10348KXoLh+GUW529Tv2kFWFsQ1r6cf8VJeQNy8oZquL+Hx9TGgFm6yFeX9heFyhNElcvN/LHwYeKmP1Xpm2t+YtEvDI0Hc8if1UnsmFMY8eIxYJ/9SHOvx2CwhNMHuwWKkCITcdyWo0J2A2Qzb7nUUjckwUQUDn813g7viGCADI8ifirQReadCKGvbP6X0UZAf3viaJetEjq1IZyJaMd9GEVFp6zP6yOtLdMft+Qa35fq9p867gjZugav7jux6eVMzELpNgEZ2nPTnzA/PMWbafqXVIFAmvPCcol693TIIaKTmoF/Fos796n1YfujmMUXKiItJoFFXO+QpaUDfEokNc6TVTKZqRcyJJ1eziGPt6gqKMkB9dvgMa53erFhWy2OfLDuQnti2bJXShJNJIzjrei5Ldk5TyJ+7dulA9l7c1/r+JAwcitU=
+      #   on:
+      #     repo: theGirrafish/TreePLE
     -
       language: java
       jdk:
         - oraclejdk11
       before_install:
         - "cd TreePLE-Spring"
-      deploy:
-        provider: heroku
-        app: treeple-api
-        api_key:
-          secure: ZCfDPll62mwc7WBir0hvejHfttT3ib4UwRT2Z+j6IW5/uarEvf6RVw/1OAjBXXJWTG5H3OE7J16a/caN1qaT45TXHokUeB4uo1dK59rSExdY7aPwYWnVKAEM91nobm9olsh4E7CtSnHvSxh77sIzmB29ebYFHd0ikF8+/AoUrrvH4Yr3e8RcxLgWiy8cAeVxY9NyHmtpV1JhI3E5P2WfbuqRNwFB4q0zbpN0ZuvVmq83/YxUolDOX4gZqqp89r3vviYShTIgljnzP4j4D0DAPuaCIgrQBx8ajbz0cQh7wkYtR+OlaQpLGhtwOy9Ni0NYPGLzVThkjomozHDjZgHRbgwz311PsDtEbWi0ZF4xWdRLdUS4gSzGseEzG9eqcpDkcF3nMcV0uLBiPEngJqEA2eSPfBGrPrj6qrN9D5YMrFy+btfiptXIG20a3+tHpdm6s3SamGOxNhb9/5iOY7JqTmf1e9OxV198D2hvMNRNL28Wus1Ka7lEgOa9oUfrfo0teniwryUV+NF6jan/NXubrGE6EXAv7AMkUpbuwSm7/Me4bEj9DCF3UQvmbHr6VBbdwduaxH6PfrUsfcnFRcOCmw22S9M3K9ucAJlH//KalV++PFpblwJXFF8K9fixtZeMpkatmkSNvtTQsSG6RHi9Hp9NsOj5JfSk9hLeBw3X33c=
-        on:
-          repo: theGirrafish/TreePLE
+      script: "echo hi"
+      # deploy:
+      #   provider: heroku
+      #   app: treeple-api
+      #   api_key:
+      #     secure: ZCfDPll62mwc7WBir0hvejHfttT3ib4UwRT2Z+j6IW5/uarEvf6RVw/1OAjBXXJWTG5H3OE7J16a/caN1qaT45TXHokUeB4uo1dK59rSExdY7aPwYWnVKAEM91nobm9olsh4E7CtSnHvSxh77sIzmB29ebYFHd0ikF8+/AoUrrvH4Yr3e8RcxLgWiy8cAeVxY9NyHmtpV1JhI3E5P2WfbuqRNwFB4q0zbpN0ZuvVmq83/YxUolDOX4gZqqp89r3vviYShTIgljnzP4j4D0DAPuaCIgrQBx8ajbz0cQh7wkYtR+OlaQpLGhtwOy9Ni0NYPGLzVThkjomozHDjZgHRbgwz311PsDtEbWi0ZF4xWdRLdUS4gSzGseEzG9eqcpDkcF3nMcV0uLBiPEngJqEA2eSPfBGrPrj6qrN9D5YMrFy+btfiptXIG20a3+tHpdm6s3SamGOxNhb9/5iOY7JqTmf1e9OxV198D2hvMNRNL28Wus1Ka7lEgOa9oUfrfo0teniwryUV+NF6jan/NXubrGE6EXAv7AMkUpbuwSm7/Me4bEj9DCF3UQvmbHr6VBbdwduaxH6PfrUsfcnFRcOCmw22S9M3K9ucAJlH//KalV++PFpblwJXFF8K9fixtZeMpkatmkSNvtTQsSG6RHi9Hp9NsOj5JfSk9hLeBw3X33c=
+      #   on:
+      #     repo: theGirrafish/TreePLE
