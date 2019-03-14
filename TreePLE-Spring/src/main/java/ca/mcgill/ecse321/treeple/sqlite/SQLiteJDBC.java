@@ -5,7 +5,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.util.ArrayList;
 
-import ca.mcgill.ecse321.treeple.TreePLESpringApplication;
+// import ca.mcgill.ecse321.treeple.TreePLESpringApplication;
 import ca.mcgill.ecse321.treeple.model.*;
 import ca.mcgill.ecse321.treeple.model.Tree.*;
 import ca.mcgill.ecse321.treeple.model.User.*;
@@ -13,16 +13,16 @@ import ca.mcgill.ecse321.treeple.model.User.*;
 public class SQLiteJDBC {
 
     private static Connection c;
-    private static String dbPath;
+    private static String dbPath = System.getProperty("user.dir") + "/TreePLE-Spring/src/main/resources/treeple.db";
 
     public SQLiteJDBC() {
-        if (TreePLESpringApplication.env.acceptsProfiles("prod")) {
-            dbPath = System.getProperty("catalina.base") + "/webapps/treeple.db";
-        } else if (TreePLESpringApplication.env.acceptsProfiles("dev")) {
-            dbPath = System.getProperty("catalina.base") + "/webapps/treeple.db";
-        } else {
-            dbPath = System.getProperty("user.dir") + "/src/main/resources/treeple.db";
-        }
+        // if (TreePLESpringApplication.env.acceptsProfiles("prod")) {
+        //     dbPath = System.getProperty("user.dir") + "/TreePLE-Spring/src/main/resources/treeple.db";
+        // } else if (TreePLESpringApplication.env.acceptsProfiles("dev")) {
+        //     dbPath = System.getProperty("user.dir") + "/TreePLE-Spring/src/main/resources/treeple.db";
+        // } else {
+        //     dbPath = System.getProperty("user.dir") + "/TreePLE-Spring/src/main/resources/treeple.db";
+        // }
     }
 
     public SQLiteJDBC(String filename) {

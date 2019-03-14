@@ -192,7 +192,7 @@ public class Forecast
   }
 
   public boolean addFcTreeAt(Tree aFcTree, int index)
-  {  
+  {
     boolean wasAdded = false;
     if(addFcTree(aFcTree))
     {
@@ -215,8 +215,8 @@ public class Forecast
       fcTrees.remove(aFcTree);
       fcTrees.add(index, aFcTree);
       wasAdded = true;
-    } 
-    else 
+    }
+    else
     {
       wasAdded = addFcTreeAt(aFcTree, index);
     }

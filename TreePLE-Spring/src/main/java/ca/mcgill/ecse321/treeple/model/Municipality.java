@@ -143,7 +143,7 @@ public class Municipality
   }
 
   public boolean addBorderAt(Location aBorder, int index)
-  {  
+  {
     boolean wasAdded = false;
     if(addBorder(aBorder))
     {
@@ -166,8 +166,8 @@ public class Municipality
       borders.remove(aBorder);
       borders.add(index, aBorder);
       wasAdded = true;
-    } 
-    else 
+    }
+    else
     {
       wasAdded = addBorderAt(aBorder, index);
     }

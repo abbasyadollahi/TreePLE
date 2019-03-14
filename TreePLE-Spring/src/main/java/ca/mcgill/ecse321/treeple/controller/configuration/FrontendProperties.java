@@ -5,13 +5,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Component
 @ConfigurationProperties(prefix = "client.web")
-public class WebFrontendProperties {
+public class FrontendProperties {
 
     // The IP address of the web frontend client
     private String ip = "192.168.56.50";
 
     // The port on which the web frontend listens
-    private int port = 8087;
+    private int port = 5000;
 
     public String getIp() {
         return ip;
