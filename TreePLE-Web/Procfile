@@ -1,0 +1,1 @@
+web: cd TreePLE-Web && npm install && npm run build && npm start
