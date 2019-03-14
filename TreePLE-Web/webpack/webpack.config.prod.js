@@ -37,7 +37,6 @@ module.exports = wpMerge(common, {
     port: process.env.PORT || 5000,
     compress: true,
     contentBase: rootDir,
-    historyApiFallback: true,
-    // disableHostCheck: true
+    historyApiFallback: true
   }
 });
