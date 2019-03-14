@@ -1,7 +1,6 @@
 package ca.mcgill.ecse321.treeple.controller.configuration;
 
 import org.springframework.stereotype.Component;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Component
 public class AndroidProperties {
