@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 import {Icon, Image, Statistic, Table} from 'semantic-ui-react';
 import SideBar from './SideBar';
 import {getTreePLESustainability} from './Requests';
-import Logo from '../images/treeple_logo.png';
+import Logo from '../assets/images/treeple_logo.png';
 
 class NavigationBar extends PureComponent {
   constructor(props) {

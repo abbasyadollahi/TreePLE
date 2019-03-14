@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-const backendUrl = 'http://' + serverHost + ':' + serverPort + '/';
-const frontendUrl = 'http://' + serverHost + ':8087/';
+const webURL = 'https://' + webHost + ':' + webPort + '/';
+const apiURL = 'http://' + apiHost + ':' + apiPort + '/';
 
 
 const AXIOS = axios.create({
-  baseURL: backendUrl,
+  baseURL: apiURL,
   headers: {
-    'Access-Control-Allow-Origin': frontendUrl,
+    'Access-Control-Allow-Origin': webURL,
     'Access-Control-Allow-Methods': 'GET, POST, PATCH',
     'Access-Control-Allow-Headers': 'Origin, Content-Type, Authorization'
   },
