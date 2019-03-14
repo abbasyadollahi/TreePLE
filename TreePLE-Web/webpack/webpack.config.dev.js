@@ -25,7 +25,6 @@ module.exports = wpMerge(common, {
     port: 5000,
     host: 'localhost',
     contentBase: rootDir,
-    historyApiFallback: true,
-    // disableHostCheck: true
+    historyApiFallback: true
   }
 });
