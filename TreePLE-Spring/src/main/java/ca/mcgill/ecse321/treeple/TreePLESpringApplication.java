@@ -16,7 +16,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.web.servlet.config.annotation.*;
 
-import ca.mcgill.ecse321.treeple.controller.configuration.*;
 import ca.mcgill.ecse321.treeple.model.*;
 import ca.mcgill.ecse321.treeple.sqlite.SQLiteJDBC;
 
@@ -26,13 +25,6 @@ public class TreePLESpringApplication extends SpringBootServletInitializer {
     @Autowired
     private Environment environment;
     public static Environment env;
-
-    @Autowired
-    private AndroidProperties androidProperties;
-
-    @Autowired
-    private FrontendProperties frontendProperties;
-
     private SQLiteJDBC sql;
 
     public static void main(String[] args) {
@@ -55,17 +47,13 @@ public class TreePLESpringApplication extends SpringBootServletInitializer {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                // Allow web client
-                String frontendUrl = "http://" + frontendProperties.getIp() + ":" + frontendProperties.getPort();
-                // Allow android client
-                String androidUrl = "http://" + androidProperties.getIp() + ":" + androidProperties.getPort();
                 // For debug purposes, allow connecting from localhost as well
                 registry.addMapping("/**")
                         .allowedMethods("*")
                         .allowedHeaders("*")
                         .allowedOrigins(
-                            frontendUrl,
-                            androidUrl,
+                            "http://treeple-web.herokuapp.com",
+                            "https://treeple-web.herokuapp.com",
                             "http://localhost:5000",
                             "https://localhost:5000",
                             "http://127.0.0.1:5000",
