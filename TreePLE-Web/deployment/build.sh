@@ -6,8 +6,8 @@ exitStatus () {
     fi
 }
 
-echo "npm --prefix $1/TreePLE-Web install --unsafe-perm"
-npm --prefix $1/TreePLE-Web install --unsafe-perm
+echo "npm --prefix $1/TreePLE-Web install"
+npm --prefix $1/TreePLE-Web install
 exitStatus $?
 
 echo "npm run --prefix $1/TreePLE-Web build"

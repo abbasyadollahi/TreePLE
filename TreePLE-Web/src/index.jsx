@@ -6,9 +6,7 @@ import NavigationBar from './components/NavigationBar';
 import 'react-day-picker/lib/style.css';
 
 const toRender = (
-  <div>
-    <NavigationBar/>
-  </div>
+  <NavigationBar/>
 );
 
 ReactDOM.render(toRender, document.getElementById('app'));

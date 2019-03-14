@@ -1,11 +1,11 @@
 import React from 'react';
 import {Flag} from 'semantic-ui-react';
-import BlackTree from './images/blackTree.svg';
-import BlueTree from './images/blueTree.svg';
-import GreenTree from './images/greenTree.svg';
-import YellowTree from './images/yellowTree.svg';
-import OrangeTree from './images/orangeTree.svg';
-import RedTree from './images/redTree.svg';
+import BlackTree from './assets/images/blackTree.svg';
+import BlueTree from './assets/images/blueTree.svg';
+import GreenTree from './assets/images/greenTree.svg';
+import YellowTree from './assets/images/yellowTree.svg';
+import OrangeTree from './assets/images/orangeTree.svg';
+import RedTree from './assets/images/redTree.svg';
 
 export const blackTree = BlackTree;
 export const blueTree = BlueTree;

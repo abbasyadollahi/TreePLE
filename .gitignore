@@ -17,6 +17,7 @@ hs_err_pid*
 # Java settings files
 *.project
 *.settings/
+*.gradle/
 
 # VSCode settings
 *.vscode/
