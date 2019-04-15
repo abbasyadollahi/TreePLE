@@ -8,18 +8,26 @@ import java.util.List;
 
 import org.json.*;
 import org.junit.*;
+import org.junit.runner.RunWith;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import ca.mcgill.ecse321.treeple.model.*;
 import ca.mcgill.ecse321.treeple.model.Tree.*;
 import ca.mcgill.ecse321.treeple.model.User.*;
 import ca.mcgill.ecse321.treeple.sqlite.SQLiteJDBC;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class TestTreePLEService {
 
-    private static SQLiteJDBC sql;
-    private static TreePLEService service;
-    private static final String dbPath = "/output/treeple_test.db";
+    @Autowired
+    private SQLiteJDBC sql;
+
+    @Autowired
+    private TreePLEService service;
 
     private static JSONObject testTree;
     private static JSONObject testUser;
@@ -29,21 +37,11 @@ public class TestTreePLEService {
 
     @BeforeClass
     public static void setUpBeforeClass() {
-        sql = new SQLiteJDBC(dbPath);
-        sql.connect();
-        service = new TreePLEService(sql);
-
         testTree = buildTestTree();
         testUser = buildTestUser();
         testSpecies = buildTestSpecies();
         testLocation = buildTestLocation();
         testMunicipality = buildTestMunicipality();
-    }
-
-    @AfterClass
-    public static void tearDownAfterClass() {
-        sql.deleteDB();
-        sql.closeConnection();
     }
 
     @After

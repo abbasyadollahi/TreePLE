@@ -3,17 +3,51 @@ spring:
     active: dev
   application:
     name: treeple-api
+    version: 1.0
+
+server:
+  host: localhost
+  port: ${PORT:8000}
+
+gmap:
+  keys:
+    - AIzaSyDzb0p2lAcypZ2IbhVyhJYu6rTQLPncY5g
+    - AIzaSyDeo4TnWCcvE-yZlpmsv9FAEyYogAzzcBk
+    - AIzaSyC2kAeJiONkZEJCcFRcO_esNEqchbuub7o
 
 ---
 
 spring:
-  profiles: dev, test
+  profiles: dev
+  datasource:
+    db: treeple
+    url: jdbc:postgresql://localhost/treeple
+    username: postgres
+    password: postgres
+
 server:
-  port: 8000
+  ssl:
+    key-alias: treeple
+    key-store: ssl/treeple.p12
+    key-store-type: PKCS12
+    key-store-password: treeple
+
+---
+
+spring:
+  profiles: test
+  datasource:
+    db: treeple_test
+    url: jdbc:postgresql://localhost/treeple_test
+    username: postgres
+    password: postgres
 
 ---
 
 spring:
   profiles: prod
-server:
-  port: ${PORT:8000}
+  datasource:
+    db: ${DATABASE_URL}
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}

@@ -11,7 +11,7 @@ import ca.mcgill.ecse321.treeple.dto.*;
 import ca.mcgill.ecse321.treeple.model.*;
 import ca.mcgill.ecse321.treeple.service.TreePLEService;
 
-@CrossOrigin(maxAge = 3600)
+@CrossOrigin(origins = "*")
 @RestController
 public class TreePLERestController {
 
@@ -28,7 +28,7 @@ public class TreePLERestController {
 
 
     // ==============================
-    // DTO CONVERSION API
+    // DTO CONVERSION
     // ==============================
 
     private TreeDto convertToDto(Tree tree) {
