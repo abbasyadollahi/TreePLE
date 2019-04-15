@@ -13,8 +13,10 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.json.*;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import ca.mcgill.ecse321.treeple.TreePLEConfig;
 import ca.mcgill.ecse321.treeple.model.*;
 import ca.mcgill.ecse321.treeple.model.Tree.*;
 import ca.mcgill.ecse321.treeple.model.User.*;
@@ -23,19 +25,16 @@ import ca.mcgill.ecse321.treeple.sqlite.SQLiteJDBC;
 @Service
 public class TreePLEService {
 
+    @Autowired
     private SQLiteJDBC sql;
+
     private String gmapsKey;
-    private final String[] gmapsKeyList = new String[]{
-        "AIzaSyDzb0p2lAcypZ2IbhVyhJYu6rTQLPncY5g",
-        "AIzaSyDeo4TnWCcvE-yZlpmsv9FAEyYogAzzcBk",
-        "AIzaSyC2kAeJiONkZEJCcFRcO_esNEqchbuub7o"
-    };
     private final String sRoleKey = "i<3tr33s";
     private final String dbKey = "ih8tr33s";
 
-    public TreePLEService(SQLiteJDBC sql) {
-        this.sql = sql;
-        this.gmapsKey = gmapsKeyList[(new Random()).nextInt(gmapsKeyList.length)];
+    @Autowired
+    public TreePLEService(TreePLEConfig config) {
+        this.gmapsKey = config.getGmap().getKeys().get(new Random().nextInt(config.getGmap().getKeys().size()));
     }
 
     public boolean setMaxId() {
@@ -215,9 +214,9 @@ public class TreePLEService {
             throw new IllegalArgumentException("Password cannot be empty!");
         if (!EnumUtils.isValidEnum(UserRole.class, role))
             throw new IllegalArgumentException("That role doesn't exist!");
-        if (role.equals(UserRole.Resident) && myAddresses.length() == 0)
+        if (role.equals(UserRole.Resident.toString()) && myAddresses.length() == 0)
             throw new IllegalArgumentException("Address cannot be empty!");
-        if (role.equals(UserRole.Scientist) && !sRoleKey.equals(scientistKey))
+        if (role.equals(UserRole.Scientist.toString()) && !sRoleKey.equals(scientistKey))
             throw new IllegalArgumentException("Authorization key for Scientist role is invalid!");
 
         password = BCrypt.hashpw(password, BCrypt.gensalt());
@@ -708,9 +707,9 @@ public class TreePLEService {
             throw new IllegalArgumentException("Password cannot be empty!");
         if (!EnumUtils.isValidEnum(UserRole.class, role))
             throw new IllegalArgumentException("That role doesn't exist!");
-        if (role.equals(UserRole.Resident) && myAddresses.length() == 0)
+        if (role.equals(UserRole.Resident.toString()) && myAddresses.length() == 0)
             throw new IllegalArgumentException("Address cannot be empty!");
-        if (role.equals(UserRole.Scientist) && !sRoleKey.equals(scientistKey))
+        if (role.equals(UserRole.Scientist.toString()) && !sRoleKey.equals(scientistKey))
             throw new IllegalArgumentException("Authorization key for Scientist role is invalid!");
 
         password = BCrypt.hashpw(password, BCrypt.gensalt());

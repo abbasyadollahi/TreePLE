@@ -1,38 +1,32 @@
 package ca.mcgill.ecse321.treeple.sqlite;
 
 import java.sql.*;
-import java.io.File;
-import java.nio.file.Files;
 import java.util.ArrayList;
 
-// import ca.mcgill.ecse321.treeple.TreePLESpringApplication;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import ca.mcgill.ecse321.treeple.TreePLEConfig;
+import ca.mcgill.ecse321.treeple.TreePLEConfig.Spring.Datasource;
 import ca.mcgill.ecse321.treeple.model.*;
 import ca.mcgill.ecse321.treeple.model.Tree.*;
 import ca.mcgill.ecse321.treeple.model.User.*;
 
+@Repository
 public class SQLiteJDBC {
 
-    private static Connection c;
-    private static String dbPath = System.getProperty("user.dir") + "/src/main/resources/treeple.db";
+    @Autowired
+    private TreePLEConfig config;
 
-    public SQLiteJDBC() {
-        // if (TreePLESpringApplication.env.acceptsProfiles("prod")) {
-        //     dbPath = System.getProperty("user.dir") + "/TreePLE-Spring/src/main/resources/treeple.db";
-        // } else if (TreePLESpringApplication.env.acceptsProfiles("dev")) {
-        //     dbPath = System.getProperty("user.dir") + "/TreePLE-Spring/src/main/resources/treeple.db";
-        // } else {
-        //     dbPath = System.getProperty("user.dir") + "/TreePLE-Spring/src/main/resources/treeple.db";
-        // }
+    private Connection c;
+    private Datasource ds;
+
+    @Autowired
+    public SQLiteJDBC(TreePLEConfig config) {
+        this.config = config;
+        this.ds = config.getSpring().getDatasource();
+        this.connect();
     }
-
-    public SQLiteJDBC(String filename) {
-        dbPath = System.getProperty("user.dir") + filename;
-    }
-
-    public String getDbPath() {
-        return dbPath;
-    }
-
 
     // ==============================
     // CONNECTION API
@@ -41,12 +35,12 @@ public class SQLiteJDBC {
     // Connect to a database
     public boolean connect() {
         try {
-            Class.forName("org.sqlite.JDBC");
+            Class.forName("org.postgresql.Driver");
 
             // Create a connection to the database
-            String url = String.format("jdbc:sqlite:%s", dbPath);
-            c = DriverManager.getConnection(url);
-            System.out.println("Connection to SQLite has been established.");
+            ds = config.getSpring().getDatasource();
+            c = DriverManager.getConnection(ds.getUrl(), ds.getUsername(), ds.getPassword());
+            System.out.println("Connection to PostgreSQL has been established.");
 
             // Trees DB Table
             String sqlTrees = "CREATE TABLE IF NOT EXISTS TREES "
@@ -58,7 +52,7 @@ public class SQLiteJDBC {
                             + " land         VARCHAR(50)  NOT NULL,"
                             + " status       VARCHAR(50)  NOT NULL,"
                             + " ownership    VARCHAR(50)  NOT NULL,"
-                            + " species      INT          NOT NULL,"
+                            + " species      VARCHAR(50)  NOT NULL,"
                             + " location     INT          NOT NULL,"
                             + " municipality VARCHAR(50)  NOT NULL,"
                             + " reports      TEXT         NOT NULL)";
@@ -80,8 +74,8 @@ public class SQLiteJDBC {
             // Locations DB Table
             String sqlLocations = "CREATE TABLE IF NOT EXISTS LOCATIONS "
                                 + "(locationId INT PRIMARY KEY NOT NULL,"
-                                + " latitude  DOUBLE NOT NULL,"
-                                + " longitude DOUBLE NOT NULL)";
+                                + " latitude  DOUBLE PRECISION NOT NULL,"
+                                + " longitude DOUBLE PRECISION NOT NULL)";
 
             // Municipalities DB Table
             String sqlMunicipalities = "CREATE TABLE IF NOT EXISTS MUNICIPALITIES "
@@ -97,14 +91,14 @@ public class SQLiteJDBC {
 
             // Forecasts DB Table
             String sqlForecasts = "CREATE TABLE IF NOT EXISTS FORECASTS "
-                                + "(forecastId INT PRIMARY KEY  NOT NULL,"
-                                + " fcDate          VARCHAR(50) NOT NULL,"
-                                + " fcUser          VARCHAR(50) NOT NULL,"
-                                + " co2Reduced      DOUBLE      NOT NULL,"
-                                + " biodiversity    DOUBLE      NOT NULL,"
-                                + " stormwater      DOUBLE      NOT NULL,"
-                                + " energyConserved DOUBLE      NOT NULL,"
-                                + " fcTrees         TEXT        NOT NULL)";
+                                + "(forecastId INT PRIMARY KEY       NOT NULL,"
+                                + " fcDate          VARCHAR(50)      NOT NULL,"
+                                + " fcUser          VARCHAR(50)      NOT NULL,"
+                                + " co2Reduced      DOUBLE PRECISION NOT NULL,"
+                                + " biodiversity    DOUBLE PRECISION NOT NULL,"
+                                + " stormwater      DOUBLE PRECISION NOT NULL,"
+                                + " energyConserved DOUBLE PRECISION NOT NULL,"
+                                + " fcTrees         TEXT             NOT NULL)";
 
             Statement stmt = c.createStatement();
             stmt.executeUpdate(sqlTrees);
@@ -127,7 +121,7 @@ public class SQLiteJDBC {
         try {
             if (c != null) {
                 c.close();
-                System.out.println("Connection to SQLite has been closed.");
+                System.out.println("Connection to PostgreSQL has been closed.");
                 return true;
             }
         } catch (Exception e) {
@@ -137,16 +131,14 @@ public class SQLiteJDBC {
     }
 
     public boolean resetDB() {
-        if (deleteDB()) {
-            return connect();
-        }
-        return false;
+        return truncateTrees() && truncateUsers() && truncateSpecies() && truncateLocations() && truncateMunicipalities() && truncateSurveyReports() && truncateForecasts();
     }
 
     public boolean deleteDB() {
+        String deleteDB = String.format("DROP DATABASE %s;", ds.getDb());
         try {
-            if (closeConnection()) {
-                return Files.deleteIfExists(new File(dbPath).toPath());
+            if (c.createStatement().executeUpdate(deleteDB) >= 0) {
+                return closeConnection();
             }
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
@@ -170,7 +162,7 @@ public class SQLiteJDBC {
             treeId, height, diameter, address, datePlanted, land, status, ownership, species.replaceAll("'", "''"), location, municipality.replaceAll("'", "''"), reports);
 
         try {
-            return c.createStatement().executeUpdate(insertTree) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(insertTree) >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -187,7 +179,7 @@ public class SQLiteJDBC {
             height, diameter, land, status, ownership, species.replaceAll("'", "''"), municipality.replaceAll("'", "''"), reports, treeId);
 
         try {
-            return c.createStatement().executeUpdate(updateTree) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(updateTree) >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -231,7 +223,7 @@ public class SQLiteJDBC {
         return tree;
     }
 
-    // Get all trees of type Species
+    // Get all Trees of type Species
     public ArrayList<Tree> getAllTreesOfSpecies(String species) {
         ArrayList<Tree> trees = new ArrayList<Tree>();
         String getTreesOfSpecies = String.format("SELECT * FROM TREES WHERE species = '%s';", species.replaceAll("'", "''"));
@@ -310,7 +302,17 @@ public class SQLiteJDBC {
         String deleteTree = String.format("DELETE FROM TREES WHERE treeId = %d;", treeId);
 
         try {
-            return c.createStatement().executeUpdate(deleteTree) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(deleteTree) >= 0;
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        return false;
+    }
+
+    // Clear Trees table
+    public boolean truncateTrees() {
+        try {
+            return c.createStatement().executeUpdate("TRUNCATE TREES;") >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -357,7 +359,7 @@ public class SQLiteJDBC {
             username, password, role, myAddresses, myTrees);
 
         try {
-            return c.createStatement().executeUpdate(insertUser) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(insertUser) >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -373,7 +375,7 @@ public class SQLiteJDBC {
             password, role, myAddresses, username);
 
         try {
-            return c.createStatement().executeUpdate(updateUser) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(updateUser) >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -389,7 +391,7 @@ public class SQLiteJDBC {
             password, username);
 
         try {
-            return c.createStatement().executeUpdate(updateUser) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(updateUser) >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -405,7 +407,7 @@ public class SQLiteJDBC {
             myTrees, username);
 
         try {
-            return c.createStatement().executeUpdate(updateUserTrees) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(updateUserTrees) >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -490,7 +492,17 @@ public class SQLiteJDBC {
         String deleteUser = String.format("DELETE FROM USERS WHERE username = '%s';", username);
 
         try {
-            return c.createStatement().executeUpdate(deleteUser) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(deleteUser) >= 0;
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        return false;
+    }
+
+    // Clear Users table
+    public boolean truncateUsers() {
+        try {
+            return c.createStatement().executeUpdate("TRUNCATE USERS;") >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -511,7 +523,7 @@ public class SQLiteJDBC {
             name.replaceAll("'", "''"), species, genus);
 
         try {
-            return c.createStatement().executeUpdate(insertSpecies) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(insertSpecies) >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -527,7 +539,7 @@ public class SQLiteJDBC {
             species, genus, name.replaceAll("'", "''"));
 
         try {
-            return c.createStatement().executeUpdate(updateSpecies) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(updateSpecies) >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -586,7 +598,17 @@ public class SQLiteJDBC {
         String speciesDelete = String.format("DELETE FROM SPECIES WHERE name = '%s';", name.replaceAll("'", "''"));
 
         try {
-            return c.createStatement().executeUpdate(speciesDelete) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(speciesDelete) >= 0;
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        return false;
+    }
+
+    // Clear Species table
+    public boolean truncateSpecies() {
+        try {
+            return c.createStatement().executeUpdate("TRUNCATE SPECIES;") >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -607,7 +629,7 @@ public class SQLiteJDBC {
             locationId, latitude, longitude);
 
         try {
-            return c.createStatement().executeUpdate(insertLocation) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(insertLocation) >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -623,7 +645,7 @@ public class SQLiteJDBC {
             latitude, longitude, locationId);
 
         try {
-            return c.createStatement().executeUpdate(updateLocation) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(updateLocation) >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -690,7 +712,17 @@ public class SQLiteJDBC {
         String deleteLocation = String.format("DELETE FROM LOCATIONS WHERE locationId = %d;", locationId);
 
         try {
-            return c.createStatement().executeUpdate(deleteLocation) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(deleteLocation) >= 0;
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        return false;
+    }
+
+    // Clear Locations table
+    public boolean truncateLocations() {
+        try {
+            return c.createStatement().executeUpdate("TRUNCATE LOCATIONS;") >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -711,7 +743,7 @@ public class SQLiteJDBC {
             name.replaceAll("'", "''"), totalTrees, borders);
 
         try {
-            return c.createStatement().executeUpdate(insertMunicipality) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(insertMunicipality) >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -727,7 +759,7 @@ public class SQLiteJDBC {
             borders, name.replaceAll("'", "''"));
 
         try {
-            return c.createStatement().executeUpdate(updateMunicipality) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(updateMunicipality) >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -743,7 +775,7 @@ public class SQLiteJDBC {
             totalTrees, name.replaceAll("'", "''"));
 
         try {
-            return c.createStatement().executeUpdate(updateMunicipality) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(updateMunicipality) >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -759,7 +791,7 @@ public class SQLiteJDBC {
             incDec, name.replaceAll("'", "''"));
 
         try {
-            return c.createStatement().executeUpdate(updateMunicipality) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(updateMunicipality) >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -834,7 +866,17 @@ public class SQLiteJDBC {
         String deleteMunicipality = String.format("DELETE FROM MUNICIPALITIES WHERE name = '%s';", name.replaceAll("'", "''"));
 
         try {
-            return c.createStatement().executeUpdate(deleteMunicipality) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(deleteMunicipality) >= 0;
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        return false;
+    }
+
+    // Clear Municipalities table
+    public boolean truncateMunicipalities() {
+        try {
+            return c.createStatement().executeUpdate("TRUNCATE MUNICIPALITIES;") >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -855,7 +897,7 @@ public class SQLiteJDBC {
             reportId, reportDate, reportUser);
 
         try {
-            return c.createStatement().executeUpdate(insertSurveyReport) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(insertSurveyReport) >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -922,7 +964,17 @@ public class SQLiteJDBC {
         String deleteSurveyReport = String.format("DELETE FROM SURVEYREPORTS WHERE reportId = %d;", reportId);
 
         try {
-            return c.createStatement().executeUpdate(deleteSurveyReport) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(deleteSurveyReport) >= 0;
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        return false;
+    }
+
+    // Clear Survey Reports table
+    public boolean truncateSurveyReports() {
+        try {
+            return c.createStatement().executeUpdate("TRUNCATE SURVEYREPORTS;") >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -944,7 +996,7 @@ public class SQLiteJDBC {
             forecastId, fcDate, fcUser, co2Reduced, biodiversity, stormwater, energyConserved, fcTrees);
 
         try {
-            return c.createStatement().executeUpdate(insertForecast) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(insertForecast) >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -1029,7 +1081,7 @@ public class SQLiteJDBC {
         String deleteForecast = String.format("DELETE FROM FORECASTS WHERE forecastId = %d;", forecastId);
 
         try {
-            return c.createStatement().executeUpdate(deleteForecast) <= 0 ? false : true;
+            return c.createStatement().executeUpdate(deleteForecast) >= 0;
         } catch (Exception e) {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
@@ -1056,5 +1108,15 @@ public class SQLiteJDBC {
 
         return new Forecast(fcDate, fcUser, stormwater, co2Reduced,
                             biodiversity, energyConserved, forecastId, fcTrees);
+    }
+
+    // Clear Forecasts table
+    public boolean truncateForecasts() {
+        try {
+            return c.createStatement().executeUpdate("TRUNCATE FORECASTS;") >= 0;
+        } catch (Exception e) {
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        }
+        return false;
     }
 }

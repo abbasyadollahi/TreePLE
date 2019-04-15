@@ -2,47 +2,38 @@ package ca.mcgill.ecse321.treeple.sqlite;
 
 import static org.junit.Assert.*;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import org.json.JSONObject;
 import org.junit.*;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import ca.mcgill.ecse321.treeple.model.*;
 import ca.mcgill.ecse321.treeple.service.TreePLEService;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class TestSQLiteJDBC {
 
-    private static SQLiteJDBC sql;
-    private static TreePLEService service;
-    private static final String dbPath = "/output/treeple_test.db";
+    @Autowired
+    private SQLiteJDBC sql;
 
+    @Autowired
+    private TreePLEService service;
 
-    private static JSONObject defaultUser;
-    private static JSONObject defaultSpecies;
-    private static JSONObject defaultLocation;
-    private static JSONObject defaultMun;
+    private JSONObject defaultUser;
+    private JSONObject defaultSpecies;
+    private JSONObject defaultLocation;
+    private JSONObject defaultMun;
 
-    private static final int numTrees = 5;
-    private static final int numUsers = 5;
-    private static final int numSpecies = 5;
-    private static final int numLocations = 5;
-    private static final int numMunicipalities = 5;
-
-    @BeforeClass
-    public static void setUpBeforeClass() {
-        sql = new SQLiteJDBC(dbPath);
-        sql.connect();
-        service = new TreePLEService(sql);
-    }
-
-    @AfterClass
-    public static void tearDownAfterClass() {
-        if (sql != null) {
-            sql.deleteDB();
-            sql.closeConnection();
-        }
-    }
+    private final int numTrees = 5;
+    private final int numUsers = 5;
+    private final int numSpecies = 5;
+    private final int numLocations = 5;
+    private final int numMunicipalities = 5;
 
     @Before
     public void setUp() {
@@ -78,19 +69,6 @@ public class TestSQLiteJDBC {
         JSONObject dbAccessKey = new JSONObject();
         dbAccessKey.put("dbAccessKey", "ih8tr33s");
         service.resetDatabase(dbAccessKey);
-    }
-
-    @Test
-    public void testResetDB() {
-        assertEquals(true, sql.resetDB());
-    }
-
-    @Test
-    public void testDeleteDB() {
-        File dbFile = (new File(System.getProperty("user.dir") + dbPath)).getAbsoluteFile();
-        assertEquals(true, dbFile.exists());
-        assertEquals(true, sql.deleteDB());
-        assertEquals(false, dbFile.exists());
     }
 
     // ======================
@@ -1049,12 +1027,6 @@ public class TestSQLiteJDBC {
         assertEquals(0, sql.getAllTrees().size());
     }
 
-    //TODO
-    // ======================
-    // SURVEY REPORT TESTS
-    // ======================
-
-    //TODO
     // ======================
     // FORECASTING TESTS
     // ======================
