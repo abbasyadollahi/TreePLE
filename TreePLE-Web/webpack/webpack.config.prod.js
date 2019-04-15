@@ -12,7 +12,7 @@ module.exports = wpMerge(common, {
   plugins: [
     new webpack.DefinePlugin({
       webHost: JSON.stringify('treeple-web.herokuapp.com'),
-      apiHost: JSON.stringify('treeple-api.herokuapp.com'),
+      apiHost: JSON.stringify('treeple-api.herokuapp.com')
     }),
     new webpack.optimize.AggressiveMergingPlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(),
