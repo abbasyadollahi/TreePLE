@@ -28,6 +28,8 @@ matrix:
       language: java
       jdk:
         - oraclejdk11
+      services:
+        - postgresql
       before_install:
         - cd TreePLE-Spring
         - psql -c 'create database treeple_test;' -U postgres
