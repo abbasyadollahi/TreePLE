@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.treeple.sqlite;
+package ca.mcgill.ecse321.treeple.persistence;
 
 import static org.junit.Assert.*;
 
@@ -16,10 +16,10 @@ import ca.mcgill.ecse321.treeple.service.TreePLEService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class TestSQLiteJDBC {
+public class TestTreePLEPSQL {
 
     @Autowired
-    private SQLiteJDBC sql;
+    private TreePLEPSQL sql;
 
     @Autowired
     private TreePLEService service;

@@ -12,13 +12,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import ca.mcgill.ecse321.treeple.model.*;
-import ca.mcgill.ecse321.treeple.sqlite.SQLiteJDBC;
+import ca.mcgill.ecse321.treeple.persistence.TreePLEPSQL;
 
 @SpringBootApplication
 public class TreePLESpringApplication {
 
     @Autowired
-    private SQLiteJDBC sql;
+    private TreePLEPSQL sql;
 
     public static void main(String[] args) {
         SpringApplication.run(TreePLESpringApplication.class, args);
@@ -43,7 +43,7 @@ public class TreePLESpringApplication {
     }
 
     @PreDestroy
-    public void closeSQLite() {
+    public void closeTreePLEPSQL() {
         if (sql != null)
             sql.closeConnection();
     }

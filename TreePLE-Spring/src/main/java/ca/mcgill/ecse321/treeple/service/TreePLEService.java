@@ -20,13 +20,13 @@ import ca.mcgill.ecse321.treeple.TreePLEConfig;
 import ca.mcgill.ecse321.treeple.model.*;
 import ca.mcgill.ecse321.treeple.model.Tree.*;
 import ca.mcgill.ecse321.treeple.model.User.*;
-import ca.mcgill.ecse321.treeple.sqlite.SQLiteJDBC;
+import ca.mcgill.ecse321.treeple.persistence.TreePLEPSQL;
 
 @Service
 public class TreePLEService {
 
     @Autowired
-    private SQLiteJDBC sql;
+    private TreePLEPSQL sql;
 
     private String gmapsKey;
     private final String sRoleKey = "i<3tr33s";
@@ -130,8 +130,7 @@ public class TreePLEService {
 
         String address = "";
         try {
-            String gmapsUrl = String.format("https://maps.googleapis.com/maps/api/geocode/json?latlng=%.8f,%.8f&key=%s",
-                                            latitude, longitude, gmapsKey);
+            String gmapsUrl = String.format("https://maps.googleapis.com/maps/api/geocode/json?latlng=%.8f,%.8f&key=%s", latitude, longitude, gmapsKey);
             CloseableHttpResponse response = HttpClients.createDefault().execute(new HttpGet(gmapsUrl));
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode >= 200 && statusCode < 300) {

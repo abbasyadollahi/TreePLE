@@ -18,6 +18,6 @@ In order to create a user with the role of Scientist, we require an extra passwo
 
 ## URLs
 
-Backend: [ecse321-11.ece.mcgill.ca:8080](http://ecse321-11.ece.mcgill.ca:8080)
+Backend: [https://treeple-api.herokuapp.com](http://https://treeple-api.herokuapp.com)
 
-Web Frontend: [ecse321-11.ece.mcgill.ca:8087](http://ecse321-11.ece.mcgill.ca:8087)
+Web Frontend: [https://treeple-web.herokuapp.com](http://https://treeple-web.herokuapp.com)

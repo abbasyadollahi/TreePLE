@@ -17,14 +17,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ca.mcgill.ecse321.treeple.model.*;
 import ca.mcgill.ecse321.treeple.model.Tree.*;
 import ca.mcgill.ecse321.treeple.model.User.*;
-import ca.mcgill.ecse321.treeple.sqlite.SQLiteJDBC;
+import ca.mcgill.ecse321.treeple.persistence.TreePLEPSQL;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class TestTreePLEService {
 
     @Autowired
-    private SQLiteJDBC sql;
+    private TreePLEPSQL sql;
 
     @Autowired
     private TreePLEService service;
