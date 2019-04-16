@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.treeple.sqlite;
+package ca.mcgill.ecse321.treeple.persistence;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import ca.mcgill.ecse321.treeple.model.Tree.*;
 import ca.mcgill.ecse321.treeple.model.User.*;
 
 @Repository
-public class SQLiteJDBC {
+public class TreePLEPSQL {
 
     @Autowired
     private TreePLEConfig config;
@@ -22,7 +22,7 @@ public class SQLiteJDBC {
     private Datasource ds;
 
     @Autowired
-    public SQLiteJDBC(TreePLEConfig config) {
+    public TreePLEPSQL(TreePLEConfig config) {
         this.config = config;
         this.ds = config.getSpring().getDatasource();
         this.connect();

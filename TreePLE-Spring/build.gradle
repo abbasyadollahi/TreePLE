@@ -41,7 +41,6 @@ dependencies {
     compile('org.mindrot:jbcrypt:0.4')
     compile('org.modelmapper:modelmapper:1.1.1')
     compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.xerial:sqlite-jdbc:3.21.0')
     compile('org.postgresql:postgresql:42.2.5')
 
     providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
