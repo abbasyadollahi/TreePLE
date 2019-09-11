@@ -18,6 +18,6 @@ In order to create a user with the role of Scientist, we require an extra passwo
 
 ## URLs
 
-Backend: [https://treeple-api.herokuapp.com](http://https://treeple-api.herokuapp.com)
+Backend: [https://treeple-api.herokuapp.com](https://treeple-api.herokuapp.com)
 
-Web Frontend: [https://treeple-web.herokuapp.com](http://https://treeple-web.herokuapp.com)
+Web Frontend: [https://treeple-web.herokuapp.com](https://treeple-web.herokuapp.com)
