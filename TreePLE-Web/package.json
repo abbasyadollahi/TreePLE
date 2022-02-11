@@ -27,7 +27,7 @@
     "@types/googlemaps": "^3.30.8",
     "@types/markerclustererplus": "^2.1.33",
     "@types/react": "^16.8.5",
-    "ajv": "^6.2.1",
+    "ajv": "^6.12.3",
     "axios": "^0.18.0",
     "lodash": "^4.17.10",
     "nivo": "^0.31.0",
